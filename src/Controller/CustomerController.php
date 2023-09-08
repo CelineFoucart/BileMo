@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Client;
+use App\Entity\Customer;
 use App\Repository\CustomerRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,5 +42,11 @@ class CustomerController extends AbstractController
         ];
 
         return $this->json($data, Response::HTTP_OK, [], ['groups' => 'index']);
+    }
+    
+    #[Route('/{id}', name: 'app_customer_show', methods:['GET'])]
+    public function showAction(Customer $customer): JsonResponse
+    {
+        return $this->json($customer, Response::HTTP_OK, [], ['groups' => 'index']);
     }
 }
