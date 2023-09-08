@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -12,24 +14,31 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["index"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["index"])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["index"])]
     private ?string $brand = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(["index"])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Groups(["index"])]
     private ?string $price = null;
 
     #[ORM\Column]
+    #[Groups(["index"])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(["index"])]
     private ?\DateTimeInterface $updatedAt = null;
 
     public function getId(): ?int
@@ -107,5 +116,12 @@ class Product
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    #[Groups(["index"])]
+    #[SerializedName('_links')]
+    public function getLinks(): array
+    {
+        return ['self' => ['href' => '/api/products/' . $this->getId()]];
     }
 }

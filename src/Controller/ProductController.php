@@ -30,12 +30,12 @@ class ProductController extends AbstractController
             "data" => $products
         ];
 
-        return $this->json($data, Response::HTTP_OK);
+        return $this->json($data, Response::HTTP_OK, [], ['groups' => 'index']);
     }
 
     #[Route('/products/{id}', name: 'app_product_show', methods:['GET'])]
     public function showAction(Product $product): JsonResponse
     {
-        return $this->json($product, Response::HTTP_OK);
+        return $this->json($product, Response::HTTP_OK, [], ['groups' => 'index']);
     }
 }
