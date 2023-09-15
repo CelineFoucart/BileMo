@@ -50,8 +50,12 @@ class CustomerController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_customer_show', methods:['GET'])]
-    public function showAction(Customer $customer): JsonResponse
+    public function showAction(Customer $customer, #[CurrentUser] ?Client $client): JsonResponse
     {
+        if ($customer->getClient()->getId() !== $client->getId()) {
+            throw $this->createAccessDeniedException('Access denied');
+        }
+
         return $this->json($customer, Response::HTTP_OK, [], ['groups' => 'index']);
     }
     
