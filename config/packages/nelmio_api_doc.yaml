@@ -1,0 +1,78 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: BileMo
+            description: The API used to get to BileMo products (an openclassroom project of the PHP/Symfony programm)
+            version: 1.0.0
+        components:
+            schemas:
+                Token:
+                    type: object
+                    properties:
+                        token:
+                            type: string
+                            readOnly: true
+                Credentials:
+                    type: object
+                    properties:
+                        username:
+                            type: string
+                        password:
+                            type: string
+                InvalidToken:
+                    type: object
+                    properties:
+                        code:
+                            type: integer
+                        message:
+                            type: string
+            securitySchemes:
+                Bearer:
+                    type: apiKey
+                    scheme: bearer
+                    bearerFormat: JWT
+        security:
+            - Bearer: []
+        paths:
+            /api/doc.json:
+                get:
+                    operationId: getDocumentation
+                    tags:
+                        - Documentation
+                    summary: Get this documentation in json format.
+            /api/login_check:
+                post:
+                    operationId: postCredentialsItem
+                    tags:
+                        - Token
+                    summary: Get the JWT token to log in.
+                    requestBody:
+                        description: Create a new token JWT
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/Credentials'
+                    responses:
+                        '200':
+                            description: Returns the JWT token
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Token'
+                        '401':
+                            description: If the credentials are invalid
+                            content:
+                                application/json:
+                                    schema:
+                                        schema:
+                                            $ref: '#/components/schemas/InvalidToken'
+                                    examples:
+                                        '401':
+                                            summary: 'Invalid credentials'
+                                            value:
+                                                code: 401
+                                                message: "Invalid credentials."
+                                    
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
