@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
+use OpenApi\Attributes as OA;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
 #[UniqueEntity(fields: ['username'])]
@@ -17,18 +18,21 @@ class Customer
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups(["index"])]
+    #[OA\Property(description: 'The unique identifier of the customer.')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 1, max: 255)]
     #[Groups(["index"])]
+    #[OA\Property(type: 'string', minLength: 1, maxLength: 255, description: 'The customer fistname.')]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 1, max: 255)]
     #[Groups(["index"])]
+    #[OA\Property(type: 'string', minLength: 1, maxLength: 255, description: 'The customer lastname.')]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
@@ -36,12 +40,14 @@ class Customer
     #[Assert\NotBlank]
     #[Assert\Email]
     #[Groups(["index"])]
+    #[OA\Property(type: 'string', minLength: 1, maxLength: 255, description: 'The customer email.')]
     private ?string $email = null;
 
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 1, max: 180)]
     #[Groups(["index"])]
+    #[OA\Property(type: 'string', minLength: 1, maxLength: 180, description: 'The customer usename.')]
     private ?string $username = null;
 
     #[ORM\ManyToOne(inversedBy: 'customers')]
@@ -115,6 +121,7 @@ class Customer
 
     #[Groups(["index"])]
     #[SerializedName('_links')]
+    #[OA\Property(type:'object', description:'The customer links', properties:[new OA\Property(property:'self', type:'string'), new OA\Property(property:'delete', type:'string')])]
     public function getLinks(): array
     {
         return [

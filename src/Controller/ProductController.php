@@ -9,11 +9,50 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use OpenApi\Attributes as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
 
 #[Route('/api')]
 class ProductController extends AbstractController
 {
+    /**
+     * Gets the product list.
+     *
+     * @param ProductRepository $productRepository
+     * @param Request $request
+     * @return JsonResponse
+     */
     #[Route('/products', name: 'app_product_index', methods:['GET'])]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns the paginated list of product',
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(ref: new Model(type: Product::class, groups: ['index']))
+        )
+    )]
+    #[OA\Parameter(
+        name: 'limit',
+        in: 'query',
+        description: 'max number of records to return',
+        schema: new OA\Schema(type: 'integer')
+    )]
+    #[OA\Parameter(
+        name: 'offset',
+        in: 'query',
+        description: 'number of records to skip',
+        schema: new OA\Schema(type: 'integer')
+    )]
+    #[OA\Tag(name: 'Product')]
+    #[Security(name: 'Bearer')]
+    #[OA\Response(
+        response: 401,
+        description: 'If the JWT Token is not found',
+        content: new OA\JsonContent(
+            ref:"#/components/schemas/InvalidToken",
+            example: [ 'code' => 401, "message" => "JWT Token not found"]),
+    )]
     public function indexAction(ProductRepository $productRepository, Request $request): JsonResponse
     {
         $limit = $request->query->getInt('limit', 20);
@@ -33,7 +72,30 @@ class ProductController extends AbstractController
         return $this->json($data, Response::HTTP_OK, [], ['groups' => 'index']);
     }
 
+    /**
+     * Get a product.
+     */
     #[Route('/products/{id}', name: 'app_product_show', methods:['GET'])]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns a product informations',
+        content: new Model(type: Product::class, groups: ['index'])
+    )]
+    #[OA\Parameter(
+        name: 'id',
+        in: 'query',
+        description: 'product id',
+        schema: new OA\Schema(type: 'integer')
+    )]
+    #[OA\Tag(name: 'Product')]
+    #[Security(name: 'Bearer')]
+    #[OA\Response(
+        response: 401,
+        description: 'If the JWT Token is not found',
+        content: new OA\JsonContent(
+            ref:"#/components/schemas/InvalidToken",
+            example: [ 'code' => 401, "message" => "JWT Token not found"]),
+    )]
     public function showAction(Product $product): JsonResponse
     {
         return $this->json($product, Response::HTTP_OK, [], ['groups' => 'index']);

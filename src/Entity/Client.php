@@ -21,6 +21,9 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $username = null;
 
     #[ORM\Column]
+    /**
+     * @var string[]
+     */
     private array $roles = [];
 
     /**
