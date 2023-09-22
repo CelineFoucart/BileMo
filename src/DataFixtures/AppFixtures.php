@@ -3,10 +3,10 @@
 namespace App\DataFixtures;
 
 use App\Entity\Client;
-use App\Entity\Product;
 use App\Entity\Customer;
-use Doctrine\Persistence\ObjectManager;
+use App\Entity\Product;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
@@ -14,7 +14,7 @@ class AppFixtures extends Fixture
     private array $data = [
         [
             'name' => 'Smartphone Samsung Galaxy Z Flip5 6,7" Nano SIM 5G 512 Go Graphite',
-            'description' => "Pliable et compact à la fois : Un design pliable ultra compact qui se range facilement dans votre sac ou votre poche.Un tout nouvel écran externe : Pour répondre à un message, changer de musique ou prendre un selfie sans ouvrir son smartphone.",
+            'description' => 'Pliable et compact à la fois : Un design pliable ultra compact qui se range facilement dans votre sac ou votre poche.Un tout nouvel écran externe : Pour répondre à un message, changer de musique ou prendre un selfie sans ouvrir son smartphone.',
             'brand' => 'Samsung',
         ],
         [
@@ -44,7 +44,7 @@ class AppFixtures extends Fixture
         ],
         [
             'name' => 'Smartphone Oppo Find X5 Pro 6,7" 5G Double SIM Noir glacé',
-            'description' => "APPAREIL PHOTO HASSELBLAD POUR SMARTPHONE Un appareil photo capturant un milliard de couleurs et bénéfi ciant du savoir-faire uniqueD’Hasselblad.BATTERIE LONGUE DURÉE + SUPERVOOC™ 80W",
+            'description' => 'APPAREIL PHOTO HASSELBLAD POUR SMARTPHONE Un appareil photo capturant un milliard de couleurs et bénéfi ciant du savoir-faire uniqueD’Hasselblad.BATTERIE LONGUE DURÉE + SUPERVOOC™ 80W',
             'brand' => 'Oppo',
         ],
         [
@@ -61,7 +61,7 @@ class AppFixtures extends Fixture
             'name' => 'Smartphone Samsung Galaxy S23 6.1" Nano SIM 5G 8 Go RAM 256 Go Lavande',
             'description' => 'Des photos et vidéos à couper le souffle. Avec capteur principal de 50MP, capteur Ultra Grand Angle de 12MP et téléobjectif de 10MP avec zoom optique 3x. Une gestion de la basse lumière éblouissante. Pour des photos, vidéos et selfies plus claires, stables et colorés à la nuit tombée.',
             'brand' => 'Samsung',
-        ]
+        ],
     ];
 
     public function __construct(

@@ -5,9 +5,9 @@ namespace App\Entity;
 use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
-use OpenApi\Attributes as OA;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -15,38 +15,59 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["index"])]
+    #[Groups(['index'])]
     #[OA\Property(description: 'The unique identifier of the product.')]
+    /**
+     * @var int|null The unique identifier of the product
+     */
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["index"])]
+    #[Groups(['index'])]
     #[OA\Property(type: 'string', maxLength: 255)]
+    /**
+     * @var string|null The product name
+     */
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["index"])]
+    #[Groups(['index'])]
     #[OA\Property(type: 'string', maxLength: 255)]
+    /**
+     * @var string|null The product brand
+     */
     private ?string $brand = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(["index"])]
+    #[Groups(['index'])]
     #[OA\Property(type: 'string')]
+    /**
+     * @var string|null The product description
+     */
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    #[Groups(["index"])]
-    #[OA\Property(type: 'number', format:'float')]
+    #[Groups(['index'])]
+    #[OA\Property(type: 'number', format: 'float')]
+    /**
+     * @var string|null The product price
+     */
     private ?string $price = null;
 
     #[ORM\Column]
-    #[Groups(["index"])]
-    #[OA\Property(type: 'string', format:'date-time')]
+    #[Groups(['index'])]
+    #[OA\Property(type: 'string', format: 'date-time')]
+    /**
+     * @var \DateTimeImmutable|null The product publication date
+     */
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(["index"])]
-    #[OA\Property(type: 'string', format:'date-time')]
+    #[Groups(['index'])]
+    #[OA\Property(type: 'string', format: 'date-time')]
+    /**
+     * @var \DateTimeInterface|null The product last update date
+     */
     private ?\DateTimeInterface $updatedAt = null;
 
     public function getId(): ?int
@@ -126,11 +147,11 @@ class Product
         return $this;
     }
 
-    #[Groups(["index"])]
+    #[Groups(['index'])]
     #[SerializedName('_links')]
-    #[OA\Property(type:'object', description:'The product links', properties:[new OA\Property(property:'self', type:'string')])]
+    #[OA\Property(type: 'object', description: 'The product links', properties: [new OA\Property(property: 'self', type: 'string')])]
     public function getLinks(): array
     {
-        return ['self' => ['href' => '/api/products/' . $this->getId()]];
+        return ['self' => ['href' => '/api/products/'.$this->getId()]];
     }
 }

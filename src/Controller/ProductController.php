@@ -4,26 +4,22 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Repository\ProductRepository;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use OpenApi\Attributes as OA;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Attributes as OA;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/api')]
 class ProductController extends AbstractController
 {
     /**
      * Gets the product list.
-     *
-     * @param ProductRepository $productRepository
-     * @param Request $request
-     * @return JsonResponse
      */
-    #[Route('/products', name: 'app_product_index', methods:['GET'])]
+    #[Route('/products', name: 'app_product_index', methods: ['GET'])]
     #[OA\Response(
         response: 200,
         description: 'Returns the paginated list of product',
@@ -50,8 +46,8 @@ class ProductController extends AbstractController
         response: 401,
         description: 'If the JWT Token is not found',
         content: new OA\JsonContent(
-            ref:"#/components/schemas/InvalidToken",
-            example: [ 'code' => 401, "message" => "JWT Token not found"]),
+            ref: '#/components/schemas/InvalidToken',
+            example: ['code' => 401, 'message' => 'JWT Token not found']),
     )]
     public function indexAction(ProductRepository $productRepository, Request $request): JsonResponse
     {
@@ -60,13 +56,13 @@ class ProductController extends AbstractController
         $products = $productRepository->FindAllPaginated($limit, $offset);
 
         $data = [
-            "meta" => [
+            'meta' => [
                 'count' => count($products),
                 'limit' => $limit,
                 'offset' => $offset,
-                'total' => $productRepository->count([])
+                'total' => $productRepository->count([]),
             ],
-            "data" => $products
+            'data' => $products,
         ];
 
         return $this->json($data, Response::HTTP_OK, [], ['groups' => 'index']);
@@ -75,7 +71,7 @@ class ProductController extends AbstractController
     /**
      * Get a product.
      */
-    #[Route('/products/{id}', name: 'app_product_show', methods:['GET'])]
+    #[Route('/products/{id}', name: 'app_product_show', methods: ['GET'])]
     #[OA\Response(
         response: 200,
         description: 'Returns a product informations',
@@ -93,8 +89,8 @@ class ProductController extends AbstractController
         response: 401,
         description: 'If the JWT Token is not found',
         content: new OA\JsonContent(
-            ref:"#/components/schemas/InvalidToken",
-            example: [ 'code' => 401, "message" => "JWT Token not found"]),
+            ref: '#/components/schemas/InvalidToken',
+            example: ['code' => 401, 'message' => 'JWT Token not found']),
     )]
     public function showAction(Product $product): JsonResponse
     {

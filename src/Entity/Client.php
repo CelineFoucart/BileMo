@@ -15,14 +15,20 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    /**
+     * @var int|null The unique identifier of the entity
+     */
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    /**
+     * @var string|null The unique username of the client
+     */
     private ?string $username = null;
 
     #[ORM\Column]
     /**
-     * @var string[]
+     * @var string[] The client roles
      */
     private array $roles = [];
 
@@ -33,15 +39,27 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    /**
+     * @var string|null The client organisation
+     */
     private ?string $organisation = null;
 
     #[ORM\Column(length: 255)]
+    /**
+     * @var string|null The client email
+     */
     private ?string $email = null;
 
     #[ORM\Column]
+    /**
+     * @var \DateTimeImmutable|null The creation date of the client
+     */
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Customer::class, orphanRemoval: true)]
+    /**
+     * @var Collection The client customers
+     */
     private Collection $customers;
 
     public function __construct()

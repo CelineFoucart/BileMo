@@ -2,7 +2,7 @@ nelmio_api_doc:
     documentation:
         info:
             title: BileMo
-            description: The API used to get to BileMo products (an openclassroom project of the PHP/Symfony programm)
+            description: The API used to display BileMo products (an openclassrooms project of the PHP/Symfony course)
             version: 1.0.0
         components:
             schemas:

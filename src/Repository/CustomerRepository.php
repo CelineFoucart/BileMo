@@ -4,8 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Client;
 use App\Entity\Customer;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Customer>
