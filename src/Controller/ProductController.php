@@ -3,19 +3,23 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use OpenApi\Attributes as OA;
 use App\Repository\ProductRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
-use OpenApi\Attributes as OA;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Contracts\Cache\ItemInterface;
 
 #[Route('/api')]
 class ProductController extends AbstractController
 {
+    public const CACHE_EXPIRATION = 86400; 
+
     /**
      * Gets the product list.
      */
@@ -49,21 +53,27 @@ class ProductController extends AbstractController
             ref: '#/components/schemas/InvalidToken',
             example: ['code' => 401, 'message' => 'JWT Token not found']),
     )]
-    public function indexAction(ProductRepository $productRepository, Request $request): JsonResponse
+    public function indexAction(ProductRepository $productRepository, Request $request, TagAwareCacheInterface $cachePool): JsonResponse
     {
         $limit = $request->query->getInt('limit', 20);
         $offset = $request->query->getInt('offset', 0);
-        $products = $productRepository->FindAllPaginated($limit, $offset);
+        $idCache = 'products-' . $limit . '-' . $offset;
+        $data = $cachePool->get($idCache, function(ItemInterface $item) use ($productRepository, $limit, $offset) {
+            $item->tag('productsCache')->expiresAfter(ProductController::CACHE_EXPIRATION);
 
-        $data = [
-            'meta' => [
-                'count' => count($products),
-                'limit' => $limit,
-                'offset' => $offset,
-                'total' => $productRepository->count([]),
-            ],
-            'data' => $products,
-        ];
+            $products = $productRepository->FindAllPaginated($limit, $offset);
+            $data = [
+                'meta' => [
+                    'count' => count($products),
+                    'limit' => $limit,
+                    'offset' => $offset,
+                    'total' => $productRepository->count([]),
+                ],
+                'data' => $products,
+            ];
+
+            return $data;
+        });
 
         return $this->json($data, Response::HTTP_OK, [], ['groups' => 'index']);
     }
