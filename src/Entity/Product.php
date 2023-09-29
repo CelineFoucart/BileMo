@@ -18,7 +18,7 @@ class Product
     #[Groups(['index'])]
     #[OA\Property(description: 'The unique identifier of the product.')]
     /**
-     * @var int|null The unique identifier of the product
+     * @var integer|null The unique identifier of the product
      */
     private ?int $id = null;
 

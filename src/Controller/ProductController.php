@@ -3,22 +3,22 @@
 namespace App\Controller;
 
 use App\Entity\Product;
-use OpenApi\Attributes as OA;
 use App\Repository\ProductRepository;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Attributes as OA;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Contracts\Cache\TagAwareCacheInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 #[Route('/api')]
 class ProductController extends AbstractController
 {
-    public const CACHE_EXPIRATION = 86400; 
+    public const CACHE_EXPIRATION = 86400;
 
     /**
      * Gets the product list.
@@ -57,8 +57,8 @@ class ProductController extends AbstractController
     {
         $limit = $request->query->getInt('limit', 20);
         $offset = $request->query->getInt('offset', 0);
-        $idCache = 'products-' . $limit . '-' . $offset;
-        $data = $cachePool->get($idCache, function(ItemInterface $item) use ($productRepository, $limit, $offset) {
+        $idCache = ('products-'.$limit.'-'.$offset);
+        $data = $cachePool->get($idCache, function (ItemInterface $item) use ($productRepository, $limit, $offset) {
             $item->tag('productsCache')->expiresAfter(ProductController::CACHE_EXPIRATION);
 
             $products = $productRepository->FindAllPaginated($limit, $offset);

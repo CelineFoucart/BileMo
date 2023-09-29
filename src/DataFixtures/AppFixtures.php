@@ -11,6 +11,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+    /**
+     * Product information to insert as demo data.
+     */
     private array $data = [
         [
             'name' => 'Smartphone Samsung Galaxy Z Flip5 6,7" Nano SIM 5G 512 Go Graphite',

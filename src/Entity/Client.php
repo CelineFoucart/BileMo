@@ -16,7 +16,7 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\GeneratedValue]
     #[ORM\Column]
     /**
-     * @var int|null The unique identifier of the entity
+     * @var integer|null The unique identifier of the entity
      */
     private ?int $id = null;
 
@@ -100,7 +100,6 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -133,8 +132,7 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        // If you store any temporary, sensitive data on the user, clear it here.
     }
 
     public function getOrganisation(): ?string
@@ -194,7 +192,7 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeCustomer(Customer $customer): static
     {
         if ($this->customers->removeElement($customer)) {
-            // set the owning side to null (unless already changed)
+            // Set the owning side to null (unless already changed)
             if ($customer->getClient() === $this) {
                 $customer->setClient(null);
             }

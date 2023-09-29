@@ -20,7 +20,7 @@ class Customer
     #[Groups(['index'])]
     #[OA\Property(description: 'The unique identifier of the customer.')]
     /**
-     * @var int|null The unique identifier of the customer
+     * @var integer|null The unique identifier of the customer
      */
     private ?int $id = null;
 

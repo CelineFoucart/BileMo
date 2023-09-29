@@ -157,10 +157,14 @@ class CustomerController extends AbstractController
         ValidatorInterface $validator,
         SerializerInterface $serializer
     ): JsonResponse {
-        /** @var Customer */
+        /** 
+         * @var Customer 
+         */
         $customer = $serializer->deserialize($request->getContent(), Customer::class, 'json', ['groups' => 'index']);
         $customer->setClient($client);
-        /** @var ConstraintViolationInterface[] */
+        /** 
+         * @var ConstraintViolationInterface[]
+         */
         $violations = $validator->validate($customer);
 
         if (count($violations) > 0) {
